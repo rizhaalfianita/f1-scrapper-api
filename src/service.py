@@ -9,7 +9,10 @@ s = HTMLSession()
 
 def get_race_result(html):
     result = {}
-    table = html.find('.resultsarchive-table')[0]
+    table = html.find('.resultsarchive-table')
+    if len(table) == 0:
+        return []
+    table = table[0]
     tabledata = [[c.text for c in row.find('td')[:-1]] for row in table.find('tr')][1:]
     tableheader = [[c.text for c in row.find('th')[:-1]] for row in table.find('tr')][0]
     res = [dict(zip(tableheader, t)) for t in tabledata]
@@ -22,9 +25,13 @@ def get_race(link_race):
     # title
     title = r.html.find('.ResultsArchiveTitle')[0].text
     # date
-    start_date = r.html.find('.start-date')[0].text
+    date = ''
+    start_date = r.html.find('.start-date')
     full_date = r.html.find('.full-date')[0].text
-    date = start_date + "-" + full_date
+    if len(start_date) == 0: 
+        date = full_date
+    else:
+        date = start_date + "-" + full_date
     # circuit
     circuit = r.html.find('.circuit-info')[0].text
     # race_result
@@ -73,7 +80,22 @@ def get_all_year(main_link):
     
     return result
 
+def list_all_year(current_year):
+    result = []
+    url = current_year    
+    r = s.get(url)
+    listyear = r.html.find('.resultsarchive-filter-wrap')[0]
+    years = [li.text for li in listyear.find('li')]
+    urls = [li.absolute_links for li in listyear.find('li')]
+    url_strings = [list(item)[0] for item in urls] 
 
+    for i in range(0, len(years)):
+        year_link = {}
+        year_link['year'] = years[i]
+        year_link['link'] = url_strings[i]
+        result.append(year_link)
+    
+    return result
 
 
 
