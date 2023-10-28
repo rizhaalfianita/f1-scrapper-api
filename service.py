@@ -8,7 +8,6 @@ s = HTMLSession()
 
 
 def get_race_result(html):
-    result = {}
     table = html.find('.resultsarchive-table')
     if len(table) == 0:
         return []
@@ -26,12 +25,12 @@ def get_race(link_race):
     title = r.html.find('.ResultsArchiveTitle')[0].text
     # date
     date = ''
-    start_date = r.html.find('.start-date')
+    # start_date = r.html.find('.start-date')
     full_date = r.html.find('.full-date')[0].text
-    if len(start_date) == 0: 
-        date = full_date
-    else:
-        date = start_date + "-" + full_date
+    # if len(start_date) == 0: 
+    date = full_date
+    # else:
+        # date = start_date[0].text + "-" + full_date
     # circuit
     circuit = r.html.find('.circuit-info')[0].text
     # race_result
