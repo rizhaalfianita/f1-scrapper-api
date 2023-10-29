@@ -1,5 +1,6 @@
 from requests_html import HTMLSession
 import json
+from concurrent.futures import ThreadPoolExecutor
 
 s = HTMLSession()
 
@@ -51,12 +52,23 @@ def get_year(link_year):
     urls = [li.absolute_links for li in listcountry.find('li')]
     url_strings = [list(item)[0] for item in urls] 
 
-    # get races in a year 
-    for i in range(1, len(countries)):
-        country_race = {}
-        country_race['country'] = countries[i]
-        country_race['race'] = get_race(url_strings[i])
-        result.append(country_race)
+    # # get races in a year 
+    # for i in range(1, len(countries)):
+    #     country_race = {}
+    #     country_race['country'] = countries[i]
+    #     country_race['race'] = get_race(url_strings[i])
+    #     result.append(country_race)
+
+    # OPTIMIZE
+    def fetch_race_data(country, race_url):
+        race_data = {}
+        race_data['country'] = country
+        race_data['race'] = get_race(race_url)
+        return race_data
+    
+    with ThreadPoolExecutor() as executor:
+        race_results = list(executor.map(lambda x: fetch_race_data(countries[x], url_strings[x]), range(1, len(countries))))
+        result.extend(race_results)
     
     return result
 
