@@ -1,0 +1,4 @@
+requests_html==0.10.0
+Flask==2.1.1
+Werkzeug>=2.0.1
+gunicorn==21.2.0
