@@ -32,4 +32,4 @@ def get_all_season():
 
 if __name__ == '__main__':
     app.config['TIMEOUT'] = 20  # Set timeout to 10 seconds
-    app.run(debug=False, host='0.0.0.0',port=10000)
+    app.run(debug=False, host="0.0.0.0", port=5000)
