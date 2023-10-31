@@ -1,6 +1,8 @@
 from requests_html import HTMLSession
 import json
 from concurrent.futures import ThreadPoolExecutor
+import datetime
+from upcoming import upcoming_races
 
 s = HTMLSession()
 
@@ -108,6 +110,17 @@ def list_all_year(current_year):
     
     return result
 
+def get_upcoming():
+    current_time = datetime.datetime.now()
+    current_date = current_time.strftime("%d %B")
+    
+    # loop through all index and compare with current date, pick the closest one
+    for i in upcoming_races:
+        if i['date'] < current_date:
+            print(i['title'])
+            print(i['date'])
+            print(i['image'])
+            return i
 
 
 def save_to_json(result, filename):
