@@ -29,6 +29,9 @@ def get_all_season():
     except Exception as e:
         return jsonify(error=str(e)), 500  # Return the error message with a 500 status code
 
+@app.route('/upcoming', methods=['GET'])
+def get_upcoming():
+    return jsonify(service.get_upcoming())
 
 if __name__ == '__main__':
     app.config['TIMEOUT'] = 20  # Set timeout to 10 seconds
